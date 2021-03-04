@@ -94,9 +94,6 @@ SatMobilityRandomTestCase::DoRun (void)
   Singleton<SatEnvVariables>::Get ()->DoInitialize ();
   Singleton<SatEnvVariables>::Get ()->SetOutputVariables ("test-sat-mobility", "random", true);
 
-  Config::Connect ("/NodeList/*/$ns3::SatMobilityModel/SatCourseChange",
-                   MakeCallback (&SatCourseChange));
-
   MobilityHelper mobility;
   mobility.SetPositionAllocator ("ns3::SatRandomBoxPositionAllocator",
                                  "Latitude", StringValue ("ns3::UniformRandomVariable[Min=-45.0|Max=80.0]"),
@@ -109,6 +106,9 @@ SatMobilityRandomTestCase::DoRun (void)
 
   mobility.SetMobilityModel ("ns3::SatConstantPositionMobilityModel");
   mobility.Install (c);
+  
+  Config::Connect ("/NodeList/*/$ns3::SatMobilityModel/SatCourseChange",
+                   MakeCallback (&SatCourseChange));
 
   for ( uint32_t i = 0; i < c.GetN (); i++ )
     {
